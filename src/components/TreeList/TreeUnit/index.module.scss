@@ -1,0 +1,120 @@
+// @import url('./animate.module.scss');
+// @use 'animate';
+
+$spacing-common: 8px;
+
+$item-height: 30px;
+$item-icon-size: 22px;
+$item-icon-margin: $spacing-common;
+$item-padding: $spacing-common;
+
+$separator-width: 1px;
+$separator-margin: calc(($item-icon-size - $separator-width) / 2);
+$separator-margin-left: $separator-margin + $item-padding;
+$separator-margin-right: $separator-margin;
+
+$primary-color: #0f77ff;
+
+.tree {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  &-item {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: $item-height;
+    padding: $item-padding;
+
+    &.active {
+      background-color: skyblue;
+    }
+
+    &:not(&.active):hover {
+      background-color: #efefef;
+      cursor: pointer;
+    }
+
+    // &:not(:last-child) {
+    //   border-bottom: 1px solid #e0e0e0;
+    // }
+
+    &-icon {
+      margin-right: 8px;
+      width: $item-icon-size;
+      height: $item-icon-size;
+      text-align: center;
+      line-height: $item-icon-size;
+
+      &.folded {
+        transform: rotate(-90deg);
+      }
+    }
+
+    &-title {
+      color: #333333;
+      font-size: 14px;
+    }
+  }
+
+  &-content {
+    display: flex;
+    flex-grow: 1;
+
+    &.folded {
+      display: none;
+      animation: anim-tree-content-folded 0.5s linear 0s 1 normal both;
+    }
+
+    // &:not(.folded) {
+    //   animation: anim-tree-content-unfolded 0.5s linear 0s 1 normal both;
+    // }
+    // & {
+    //   :global {
+
+    //   }
+    // }
+  }
+
+  .separator {
+    display: inline-block;
+    margin: 0 $separator-margin-right 0 $separator-margin-left;
+    width: $separator-width;
+    background-color: $primary-color;
+  }
+
+  &-children {
+    display: inline-block;
+    width: calc(100% - $item-icon-size - $item-icon-margin - 2 * $item-padding);
+  }
+}
+
+// @keyframes anim-tree-content-folded {
+//   0% {
+//     transform: translateY(0);
+//     opacity: 1;
+//   }
+
+//   90% {
+//     transform: translateY(-100%);
+//     opacity: 0;
+//   }
+
+//   100% {
+//     display: none;
+//     transform: translateY(0);
+//   }
+// }
+
+// @keyframes anim-tree-content-unfolded {
+//   0% {
+//     transform: translateY(-100%);
+//     opacity: 0;
+//   }
+
+//   100% {
+//     transform: translateY(0);
+//     opacity: 1;
+//   }
+// }

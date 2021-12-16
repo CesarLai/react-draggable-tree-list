@@ -1,0 +1,39 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+
+  &-header {
+    flex-shrink: 0;
+    height: 55px;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  &-content {
+    display: flex;
+    flex-grow: 1;
+    overflow: hidden;
+  }
+
+  &-area {
+    &-left,
+    &-right {
+      flex-shrink: 0;
+      width: 300px;
+      overflow: hidden;
+    }
+
+    &-left {
+      border-right: 1px solid #e0e0e0;
+    }
+
+    &-right {
+      border-left: 1px solid #e0e0e0;
+    }
+
+    &-center {
+      flex-grow: 1;
+    }
+  }
+}
