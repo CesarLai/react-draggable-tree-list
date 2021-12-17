@@ -1,0 +1,20 @@
+@import './vars.scss';
+
+@mixin draggable-ghost {
+  :global {
+    .tree-list-ghost-item::after {
+      display: block;
+      padding: 0 14px;
+      width: 100%;
+      height: $item-height;
+      line-height: $item-height;
+      content: '插入到此区域';
+      color: $primary-color;
+      font-weight: 600;
+      font-size: 14px;
+      text-align: left;
+      background-color: $bg-selected-item;
+      border: 1px dashed $primary-color;
+    }
+  }
+}

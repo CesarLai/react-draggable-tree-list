@@ -1,6 +1,7 @@
-import React, { FC } from 'react'
+import React, { FC, useRef, useEffect } from 'react'
 import { CaretDownOutlined } from '@ant-design/icons'
 import classNames from 'classnames'
+import Sortable, { SortableEvent } from 'sortablejs'
 
 import { TreeNode } from '../types'
 import styles from './index.module.scss'
@@ -9,6 +10,8 @@ type FoldedChangeCallback = (node: TreeNode) => void
 
 interface TreeUnitProps {
   data: TreeNode
+  draggableClass: string
+  ghostClass: string
   onFoldedChange?: FoldedChangeCallback
 }
 
@@ -16,6 +19,8 @@ const CLASSNAME_PREFIX = 'tree'
 
 const TreeUnit: FC<TreeUnitProps> = (props) => {
   const { data } = props
+  const draggableItemRef = useRef<HTMLDivElement | null>(null)
+  const sortableRef = useRef<Sortable | null>(null)
 
   const onFoldedChange = () => {
     console.log('foldchange', data)
@@ -38,14 +43,48 @@ const TreeUnit: FC<TreeUnitProps> = (props) => {
     })
   }
 
+  const onDragStart = (e: SortableEvent) => {
+    console.log('onStart', e.item)
+  }
+
+  const onDragEnd = (e: SortableEvent) => {
+    console.log('onEnd', e.item, e.from, e.to)
+  }
+
+  useEffect(() => {
+    if (draggableItemRef.current?.parentElement) {
+      sortableRef.current = new Sortable(
+        draggableItemRef.current?.parentElement,
+        {
+          // group: {
+          //   name: 'tree-list-item-sortable',
+          //   pull: 'clone',
+          //   put: false
+          // },
+          sort: true,
+          // swap: true,
+          dragClass: props.draggableClass,
+          ghostClass: props.ghostClass
+          // swapClass: props.swapClass
+          // draggable: `.${CLASSNAME_PREFIX}-draggable-node`,
+          // onStart: onDragStart,
+          // onEnd: onDragEnd
+        }
+      )
+      return () => {
+        sortableRef.current?.destroy()
+      }
+    }
+  }, [props.draggableClass, props.ghostClass])
+
   return (
-    <div className={styles[CLASSNAME_PREFIX]}>
+    <div
+      className={classNames(styles[CLASSNAME_PREFIX], props.draggableClass)}
+      ref={draggableItemRef}
+    >
       <div
         data-draggable-item-id={data.id}
-        className={classNames(
-          styles[`${CLASSNAME_PREFIX}-item`],
-          `${CLASSNAME_PREFIX}-draggable-node`
-        )}
+        className={classNames(styles[`${CLASSNAME_PREFIX}-item`])}
         onClick={onFoldedChange}
       >
         {!!data.children?.length && (
@@ -75,6 +114,8 @@ const TreeUnit: FC<TreeUnitProps> = (props) => {
               <TreeUnit
                 key={item.title}
                 data={item}
+                draggableClass={props.draggableClass}
+                ghostClass={props.ghostClass}
                 onFoldedChange={onChildrenFoldedChange}
               />
             ))}
